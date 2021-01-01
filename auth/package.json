@@ -1,0 +1,15 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "author": "Martin Hunt",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.9"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.1.3"
+  }
+}
