@@ -8,8 +8,12 @@ import 'express-async-errors'
 // init express
 const app = express()
 
+app.get('/auth/test', (req, res) => {
+  res.status(200).send('tets I am alive')
+})
+
 // temp route
-app.get('/', (req, res) => {
+app.get('/auth', (req, res) => {
   res.status(200).send('I am alive')
 })
 
