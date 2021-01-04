@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@mhunt/voting-common@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@mhunt/voting-common/-/voting-common-1.0.1.tgz#038869d42c41e3163f4274176743a68b4d92cb9e"
+  integrity sha512-rmrJ2b8TjV1PZVq3C+Z8XPdsVnuG6aeQKnP2OMNLTB6XBopToeJwmVx4sP31TihdgnEHE1dpnul4gQNU7W/B0w==
+  dependencies:
+    express "^4.17.1"
+
 "@types/body-parser@*":
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.0.tgz#0685b3c47eb3006ffed117cdd55164b61f80538f"

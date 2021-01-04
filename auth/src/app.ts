@@ -6,6 +6,8 @@ import cookieSession from 'cookie-session'
 // See https://expressjs.com/en/guide/error-handling.html and https://www.npmjs.com/package/express-async-errors
 import 'express-async-errors'
 
+import { notFoundHandler } from '@mhunt/voting-common'
+
 // init express
 const app = express()
 
@@ -27,13 +29,13 @@ app.get('/auth/test', (req, res) => {
   res.status(200).send('tets I am alive')
 })
 
-// TODO: 404 catch all from common
-
 // TODO: Health check from common
-// TODO: test
-app.get('/health', (req, res) => {
+app.get('/auth/health', (req, res) => {
   res.status(200).send('I am alive')
 })
+
+// Catch all 404 route
+app.all('*', notFoundHandler)
 
 // TODO: Error Handler from Common
 // TODO: test
