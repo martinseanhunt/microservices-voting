@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@mhunt/voting-common@^1.0.1":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@mhunt/voting-common/-/voting-common-1.0.5.tgz#8c95feaa8b0db89c2aeedc5dd32d3b7d85e67b8f"
-  integrity sha512-ZGVs4Iuluz4b6/wDZwopLvRTfBxDO4lzvzWd35eqqcVa2T2xTyRZmI9DLx6vnHhk/Xa2h0bWK0tEO8GRSftlzA==
+"@mhunt/voting-common@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@mhunt/voting-common/-/voting-common-1.0.10.tgz#7d38aacdec4a7a5d0d094ac4910a86a2cab28f1e"
+  integrity sha512-YiPeCT9aZlpYRxWN/CpsNYQs5DS5uYjkwvY09Uc2dYWoE1voWOr2l6TcIOacLBs1swzYltxqMbKO3PNBhwFRGA==
   dependencies:
     express "^4.17.1"
 
