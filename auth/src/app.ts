@@ -6,6 +6,8 @@ import cookieSession from 'cookie-session'
 // See https://expressjs.com/en/guide/error-handling.html and https://www.npmjs.com/package/express-async-errors
 import 'express-async-errors'
 
+import { signup } from './routes/signup'
+
 import {
   notFoundHandler,
   healthCheckHandler,
@@ -28,6 +30,9 @@ app.use(
     secure: false,
   })
 )
+
+// Routes
+app.post('/auth/signup', signup)
 
 // Health check
 app.get('/auth/health', healthCheckHandler)
