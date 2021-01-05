@@ -1,8 +1,24 @@
 import { Request, Response, Handler } from 'express'
 import { body } from 'express-validator'
 
+import { BadRequestError } from '@mhunt/voting-common'
+
+import { User } from '../models/User'
+
 export const signup: Handler = async (req: Request, res: Response) => {
-  res.status(201).send({ success: true })
+  const { email, password } = req.body
+
+  // Check if user already exists
+  const existingUser = await User.findOne({ email })
+  if (existingUser) throw new BadRequestError('Email in use')
+
+  // Create the user and add to mongodb
+  const user = User.build({ email, password })
+  await user.save()
+
+  // TODO: Create the jwt, save to session
+
+  res.status(201).send(user)
 }
 
 export const signupValidation = [

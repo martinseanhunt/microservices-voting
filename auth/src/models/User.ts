@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+import { toHash } from '../utils/password'
+
 // properties required for user creation
 interface UserAttrs {
   email: string
@@ -28,16 +30,40 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+  },
+  {
+    // Transform the object which is returned when serializing the
+    // document as JSON, i.e. when we return the document in a response
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.password
+        ret.id = ret._id
+        delete ret._id
+        delete ret.__v
+      },
+    },
   }
-  // TODO: add the transform funciton to define what is returned as JSON
 )
 
-// TODO: presave hook to hash the password
+// Presave hook to hash the password
+userSchema.pre('save', async function (done) {
+  // Only hash the password if it's been changed. isModified also returns true
+  // when a new user is being created.
+  if (this.isModified('password')) {
+    const hashed = await toHash(this.get('password'))
+    this.set('password', hashed)
+  }
+
+  // mongo doesn't quite know how to handle async. Have to call done manually
+  done()
+})
+
+// custom build function so we can type check the input parameters
+userSchema.statics.build = (attrs: UserAttrs) => {
+  return new User(attrs)
+}
 
 // initialize the model
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema)
-
-// custom build function so we can type check the input parameters
-userSchema.statics.build = (attrs: UserAttrs) => new User(attrs)
 
 export { User }

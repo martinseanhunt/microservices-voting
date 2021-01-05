@@ -17,8 +17,8 @@ export const errorHandler = (
   }
 
   // Otherwise handle generic errors
-  console.error(err.message || err)
+  console.error(err)
   return res.status(500).send({
-    errors: [{ message: err.message || 'something unexpected went wrong' }],
+    errors: [{ message: 'Something unexpected went wrong' }],
   })
 }

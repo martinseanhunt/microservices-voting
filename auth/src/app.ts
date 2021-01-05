@@ -33,6 +33,7 @@ app.use(
   })
 )
 
+// TODO: TESTS!
 // Routes
 app.post('/auth/signup', signupValidation, handleValidationErrors, signup)
 
