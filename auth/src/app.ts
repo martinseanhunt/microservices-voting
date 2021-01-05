@@ -6,7 +6,9 @@ import cookieSession from 'cookie-session'
 // See https://expressjs.com/en/guide/error-handling.html and https://www.npmjs.com/package/express-async-errors
 import 'express-async-errors'
 
-import { signup } from './routes/signup'
+import { handleValidationErrors } from '@mhunt/voting-common'
+
+import { signup, signupValidation } from './routes/signup'
 
 import {
   notFoundHandler,
@@ -32,7 +34,7 @@ app.use(
 )
 
 // Routes
-app.post('/auth/signup', signup)
+app.post('/auth/signup', signupValidation, handleValidationErrors, signup)
 
 // Health check
 app.get('/auth/health', healthCheckHandler)
