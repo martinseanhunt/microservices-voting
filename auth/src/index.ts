@@ -4,6 +4,7 @@ import { app } from './app'
 
 const connectAndStart = async () => {
   if (!process.env.MONGO_URI) throw new Error('Please set MONGO_URI')
+  if (!process.env.JWT_KEY) throw new Error('Please set JWT_KEY')
 
   // TODO: connect to database
   await mongoose.connect(process.env.MONGO_URI, {

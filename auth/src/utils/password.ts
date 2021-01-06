@@ -13,3 +13,10 @@ export const toHash = async (password: string): Promise<string> => {
   // Return "hashedpasword.salt"
   return `${hashedPasswordBuffer.toString('hex')}.${salt}`
 }
+
+export const compare = async (input: string, saved: string) => {
+  const [hashedPassword, salt] = saved.split('.')
+  const hashedInput = (await scrypt(input, salt, 64)) as Buffer
+
+  return hashedInput.toString('hex') === hashedPassword
+}

@@ -4,6 +4,7 @@ import { body } from 'express-validator'
 import { BadRequestError } from '@mhunt/voting-common'
 
 import { User } from '../models/User'
+import { createJwt } from '../utils/createJwt'
 
 export const signup: Handler = async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -16,7 +17,9 @@ export const signup: Handler = async (req: Request, res: Response) => {
   const user = User.build({ email, password })
   await user.save()
 
-  // TODO: Create the jwt, save to session
+  // Create the jwt, save to session
+  req.session = { jwt: createJwt(user) }
+  console.log({ jwt: createJwt(user) })
 
   res.status(201).send(user)
 }
