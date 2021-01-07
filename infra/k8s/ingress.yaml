@@ -17,3 +17,10 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
+          - path: /causes/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: causes-srv
+                port:
+                  number: 3000
