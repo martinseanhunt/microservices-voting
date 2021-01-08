@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: causes-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: causes
   template:
     metadata:
       labels:
-        app: auth
+        app: causes
     spec:
       containers:
-        - name: auth
-          image: martinseanhunt/voting-auth
+        - name: causes
+          image: martinseanhunt/voting-causes
           env:
-            - name: USERS_MONGO_URI
+            - name: CAUSES_MONGO_URI
               valueFrom:
                 secretKeyRef:
-                  name: mongo-secret
-                  key: MONGO_URI
+                  name: causes-mongo-secret
+                  key: CAUSES_MONGO_URI
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -30,13 +30,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: causes-srv
 spec:
   type: ClusterIP
   selector:
-    app: auth
+    app: causes
   ports:
-    - name: auth
+    - name: causes
       protocol: TCP
       port: 3000
       targetPort: 3000

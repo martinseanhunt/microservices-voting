@@ -6,18 +6,12 @@ import cookieSession from 'cookie-session'
 // See https://expressjs.com/en/guide/error-handling.html and https://www.npmjs.com/package/express-async-errors
 import 'express-async-errors'
 
-import { handleValidationErrors } from '@mhunt/voting-common'
-
-import { signup, signupValidation } from './routes/signup'
-import { signin, signinValidation } from './routes/signin'
-import { signout } from './routes/signout'
-import { currentUserHandler } from './routes/currentUser'
-
 import {
   notFoundHandler,
   healthCheckHandler,
   errorHandler,
   currentUser,
+  handleValidationErrors,
 } from '@mhunt/voting-common'
 
 // init express
@@ -42,13 +36,9 @@ app.use(currentUser)
 
 // TODO: TESTS!
 // Routes
-app.post('/auth/signup', signupValidation, handleValidationErrors, signup)
-app.post('/auth/signin', signinValidation, handleValidationErrors, signin)
-app.post('/auth/signout', signout)
-app.get('/auth/currentuser', currentUserHandler)
 
 // Health check
-app.get('/auth/health', healthCheckHandler)
+app.get('/causes/health', healthCheckHandler)
 
 // Catch all 404 route
 app.all('*', notFoundHandler)
