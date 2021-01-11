@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
+import { Role } from '../types/Role'
+
 interface UserPayload {
   id: string
   email: string
+  role: Role
 }
 
 // Add session and currentUser property on to Request interface

@@ -12,7 +12,12 @@ import {
   errorHandler,
   currentUser,
   handleValidationErrors,
+  protectedRoute,
+  adminRoute,
 } from '@mhunt/voting-common'
+
+import { createCause, createCauseValidation } from './routes/createCause'
+import { getCauses } from './routes/getCauses'
 
 // init express
 const app = express()
@@ -36,6 +41,14 @@ app.use(currentUser)
 
 // TODO: TESTS!
 // Routes
+app.post(
+  '/causes/create',
+  adminRoute,
+  createCauseValidation,
+  handleValidationErrors,
+  createCause
+)
+app.get('/causes', protectedRoute, getCauses)
 
 // Health check
 app.get('/causes/health', healthCheckHandler)

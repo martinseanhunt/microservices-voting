@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+import { Role } from '@mhunt/voting-common'
+
 import { toHash } from '../utils/password'
 
 // properties required for user creation
@@ -12,6 +14,7 @@ interface UserAttrs {
 export interface UserDoc extends mongoose.Document {
   email: string
   password: string
+  role: string
 }
 
 // Static properties / methods for the model
@@ -29,6 +32,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    role: {
+      type: String,
+      enum: Object.values(Role),
+      default: Role.User,
     },
   },
   {
@@ -54,7 +62,7 @@ userSchema.pre('save', async function (done) {
     this.set('password', hashed)
   }
 
-  // mongo doesn't quite know how to handle async. Have to call done manually
+  // mongo doesn't know how to handle async. Have to call done manually
   done()
 })
 
