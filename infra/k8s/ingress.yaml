@@ -24,3 +24,10 @@ spec:
                 name: causes-srv
                 port:
                   number: 3000
+          - path: /allocations/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: allocations-srv
+                port:
+                  number: 3000

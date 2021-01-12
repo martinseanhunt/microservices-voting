@@ -12,7 +12,6 @@ import {
   errorHandler,
   currentUser,
   handleValidationErrors,
-  protectedRoute,
   adminRoute,
 } from '@mhunt/voting-common'
 
@@ -48,7 +47,7 @@ app.post(
   handleValidationErrors,
   createCause
 )
-app.get('/causes', protectedRoute, getCauses)
+app.get('/causes', getCauses)
 
 // Health check
 app.get('/causes/health', healthCheckHandler)

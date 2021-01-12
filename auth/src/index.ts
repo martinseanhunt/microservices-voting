@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 
+// import { } from './events/nats'
 import { app } from './app'
 
 const connectAndStart = async () => {

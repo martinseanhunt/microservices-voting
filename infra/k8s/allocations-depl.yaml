@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: allocations-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: allocations
+  template:
+    metadata:
+      labels:
+        app: allocations
+    spec:
+      containers:
+        - name: allocations
+          image: martinseanhunt/voting-allocations
+          env:
+            - name: ALLOCATIONS_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: allocations-mongo-secret
+                  key: ALLOCATIONS_MONGO_URI
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: allocations-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: allocations
+  ports:
+    - name: allocations
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

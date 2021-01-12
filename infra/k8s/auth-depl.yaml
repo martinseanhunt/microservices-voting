@@ -26,6 +26,16 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'nats-voting'
+            - name: NATS_CLIENT_ID
+              # using this to dynamically set the value to the pod name
+              # as this value needs to be unique for ALL instances of the service
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 ---
 apiVersion: v1
 kind: Service
