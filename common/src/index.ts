@@ -12,3 +12,5 @@ export * from './errors/NotFoundError'
 export * from './errors/AuthorizationError'
 
 export * from './types/Role'
+
+export * from './events/nats'

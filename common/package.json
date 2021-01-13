@@ -1,6 +1,6 @@
 {
   "name": "@mhunt/voting-common",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "//": "only incldue the built files in the actual package that gets installed",
@@ -17,7 +17,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-validator": "^6.9.2",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "node-nats-streaming": "^0.3.2"
   },
   "devDependencies": {
     "@types/cookie-session": "^2.0.42",
