@@ -14,3 +14,7 @@ export * from './errors/AuthorizationError'
 export * from './types/Role'
 
 export * from './events/nats'
+export * from './events/Publisher'
+export * from './events/types/Event'
+export * from './events/types/Subjects'
+export * from './events/event-types/UserCreatedEvent'

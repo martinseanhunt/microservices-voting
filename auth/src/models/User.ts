@@ -15,6 +15,7 @@ export interface UserDoc extends mongoose.Document {
   email: string
   password: string
   role: string
+  version: number
 }
 
 // Static properties / methods for the model
@@ -47,9 +48,20 @@ const userSchema = new mongoose.Schema(
         delete ret.password
         ret.id = ret._id
         delete ret._id
-        delete ret.__v
+        delete ret.version
       },
     },
+    // Makes sure that the version is updated on every save
+    // and that we can't save a doc if the version is not sequential
+    // This makes sure that any nats events are processed in the correct order
+
+    // TODO: Make sure this gives us everything updte-if-current does and it's working as
+    // intended
+
+    // TODO: May not end up using this for the Uesr model... Not sure yet
+    optimisticConcurrency: true,
+    // Rename __v to version
+    versionKey: 'version',
   }
 )
 
