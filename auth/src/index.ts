@@ -13,6 +13,7 @@ const connectAndStart = async () => {
   if (!process.env.NATS_CLUSTER_ID)
     throw new Error('Please set NATS_CLUSTER_ID')
 
+  // TODO: handle shutdown / disconnect ?
   // connect to nats
   await nats.connect(
     process.env.NATS_CLUSTER_ID,
