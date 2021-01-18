@@ -8,6 +8,10 @@ import { User } from '../../models/User'
 
 // TODO: tests
 
+// TODO: Update this function to emit an event for each individual user. and handle adding points
+// tothe user document in the auth serve (rename auth service to user service). Then have the user
+// service emit a user updated event which this servicce will receive and update the user doc accordingly!
+
 export class UpdateUserPointsListener extends Listener<UpdateUserPointsEvent> {
   readonly subject = Subjects.UpdateUserPoints
   queueGroupName = queueGroupName
