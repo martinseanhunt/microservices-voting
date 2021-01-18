@@ -41,8 +41,6 @@ const userSchema = new mongoose.Schema(
 
     // TODO: Make sure this gives us everything updte-if-current does and it's working as
     // intended
-
-    // TODO: May not end up using this for the Uesr model... Not sure yet
     optimisticConcurrency: true,
     // Rename __v to version
     versionKey: 'version',

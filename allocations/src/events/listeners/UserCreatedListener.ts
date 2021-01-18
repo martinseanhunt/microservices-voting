@@ -1,12 +1,7 @@
 // TODO - saved as dev dep.. Make sure this works in prod
 import { Message } from 'node-nats-streaming'
 
-import {
-  nats,
-  Listener,
-  UserCreatedEvent,
-  Subjects,
-} from '@mhunt/voting-common'
+import { Listener, UserCreatedEvent, Subjects } from '@mhunt/voting-common'
 
 import { queueGroupName } from './queueGroupName'
 import { User } from '../../models/User'
@@ -14,7 +9,7 @@ import { User } from '../../models/User'
 // TODO: tests
 
 export class UserCreatedListener extends Listener<UserCreatedEvent> {
-  subject = Subjects.UserCreated
+  readonly subject = Subjects.UserCreated
   queueGroupName = queueGroupName
 
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {

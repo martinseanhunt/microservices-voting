@@ -18,4 +18,6 @@ export * from './events/Publisher'
 export * from './events/Listener'
 export * from './events/types/Event'
 export * from './events/types/Subjects'
+
 export * from './events/event-types/UserCreatedEvent'
+export * from './events/event-types/UpdateUserPointsEvent'

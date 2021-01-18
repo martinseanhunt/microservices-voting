@@ -46,6 +46,7 @@ kind: CronJob
 metadata:
   name: update-user-points
 spec:
+  # Once a minute for testing purpoueses
   schedule: '* * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
