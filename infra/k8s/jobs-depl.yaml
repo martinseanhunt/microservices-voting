@@ -1,31 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: allocations-depl
+  name: jobs-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: allocations
+      app: jobs
   template:
     metadata:
       labels:
-        app: allocations
+        app: jobs
     spec:
       containers:
-        - name: allocations
-          image: martinseanhunt/voting-allocations
+        - name: jobs
+          image: martinseanhunt/voting-jobs
           env:
-            - name: ALLOCATIONS_MONGO_URI
-              valueFrom:
-                secretKeyRef:
-                  name: allocations-mongo-secret
-                  key: ALLOCATIONS_MONGO_URI
-            - name: JWT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY
             - name: NATS_URI
               value: 'http://nats-srv:4222'
             - name: NATS_CLUSTER_ID
@@ -40,13 +30,35 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: allocations-srv
+  name: jobs-srv
 spec:
   type: ClusterIP
   selector:
-    app: allocations
+    app: jobs
   ports:
-    - name: allocations
+    - name: jobs
       protocol: TCP
       port: 3000
       targetPort: 3000
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-user-points
+spec:
+  schedule: '* * * * *'
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-points
+              image: buildpack-deps:curl
+              args:
+                - /bin/sh
+                - -ec
+                - curl http://jobs-srv:3000/update-user-points
+          restartPolicy: Never

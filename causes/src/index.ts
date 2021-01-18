@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 import { nats } from '@mhunt/voting-common'
 
 import { app } from './app'
-import { UserCreatedListener } from './events/listeners/UserCreatedListener'
 
 const connectAndStart = async () => {
   if (!process.env.CAUSES_MONGO_URI)
@@ -30,7 +29,7 @@ const connectAndStart = async () => {
   console.log('connected to causes database')
 
   // Start listeners
-  new UserCreatedListener(nats.client).listen()
+  // TODO
 
   const PORT = process.env.LISTEN_PORT || 3000
   app.listen(PORT, () => console.log(`Causes service listening on ${PORT}`))

@@ -69,7 +69,7 @@ export abstract class Listener<T extends Event> {
       const sequence = msg.getSequence()
 
       console.log(
-        `Message recieved: ${this.subject} / ${this.queueGroupName} - ${sequence}`
+        `Message recieved from service: ${this.queueGroupName} on channel: ${this.subject} - sequence: ${sequence}`
       )
 
       // Get the data from the message

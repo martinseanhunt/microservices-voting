@@ -1,7 +1,12 @@
 // TODO - saved as dev dep.. Make sure this works in prod
 import { Message } from 'node-nats-streaming'
 
-import { Listener, UserCreatedEvent, Subjects } from '@mhunt/voting-common'
+import {
+  nats,
+  Listener,
+  UserCreatedEvent,
+  Subjects,
+} from '@mhunt/voting-common'
 
 import { queueGroupName } from './queueGroupName'
 import { User } from '../../models/User'
