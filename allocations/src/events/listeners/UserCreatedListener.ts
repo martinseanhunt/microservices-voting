@@ -13,10 +13,10 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
   queueGroupName = queueGroupName
 
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
-    const { id } = data
+    const { id, points } = data
 
-    // Save a copy of the user ID to the Users collection and initialize their points to 0
-    const user = User.build({ id, points: 0 })
+    // Save a copy of the user ID and their initial points value to the Users collection
+    const user = User.build({ id, points })
     await user.save()
 
     console.log('User saved to collection')

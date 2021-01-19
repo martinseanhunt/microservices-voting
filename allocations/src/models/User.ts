@@ -16,6 +16,7 @@ export interface UserDoc extends mongoose.Document {
 interface UserModel extends mongoose.Model<UserDoc> {
   // create our own build method so we can type check params
   build(attrs: UserAttrs): UserDoc
+  findPreviousVersion(id: string, version: number): Promise<UserDoc | null>
 }
 
 const userSchema = new mongoose.Schema(
@@ -55,6 +56,15 @@ userSchema.statics.build = (attrs: UserAttrs) => {
     // setting the mongoose _id property using the incoming id
     _id: id,
     ...rest,
+  })
+}
+
+// Static method to find the previous sequential version of a user. Using this so we can reject messages from NATS
+// when they arrive out of order.
+userSchema.statics.findPreviousVersion = (id: string, version: number) => {
+  return User.findOne({
+    _id: id,
+    version: version - 1,
   })
 }
 
