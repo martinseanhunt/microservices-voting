@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import { nats } from '@mhunt/voting-common'
 
 import { app } from './app'
+import { UpdateUserPointsListener } from './events/listeners/UpdateUserPointsListener'
 
 const connectAndStart = async () => {
   // Check env variables are set
@@ -28,6 +29,9 @@ const connectAndStart = async () => {
     useCreateIndex: true,
   })
   console.log('connected to users database')
+
+  // Initialize listeners
+  new UpdateUserPointsListener(nats.client).listen()
 
   const PORT = process.env.LISTEN_PORT || 3000
   app.listen(PORT, () => console.log(`Users service listening on ${PORT}`))

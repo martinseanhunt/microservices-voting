@@ -8,6 +8,7 @@ import { toHash } from '../utils/password'
 interface UserAttrs {
   email: string
   password: string
+  points?: number
 }
 
 // properties of the returned user document
@@ -15,6 +16,7 @@ export interface UserDoc extends mongoose.Document {
   email: string
   password: string
   role: string
+  points: number
   version: number
 }
 
@@ -39,6 +41,10 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(Role),
       default: Role.User,
     },
+    points: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     // Transform the object which is returned when serializing the
@@ -57,8 +63,6 @@ const userSchema = new mongoose.Schema(
 
     // TODO: Make sure this gives us everything updte-if-current does and it's working as
     // intended
-
-    // TODO: May not end up using this for the Uesr model... Not sure yet
     optimisticConcurrency: true,
     // Rename __v to version
     versionKey: 'version',

@@ -1,7 +1,7 @@
 import { Subjects } from '../types/Subjects'
 
-export interface UserCreatedEvent {
-  subject: Subjects.UserCreated
+export interface UserUpdatedEvent {
+  subject: Subjects.UserUpdated
   data: {
     id: string
     version: number

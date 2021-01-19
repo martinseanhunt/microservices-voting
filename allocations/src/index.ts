@@ -4,7 +4,6 @@ import { nats } from '@mhunt/voting-common'
 
 import { app } from './app'
 import { UserCreatedListener } from './events/listeners/UserCreatedListener'
-import { UpdateUserPointsListener } from './events/listeners/UpdateUserPointsListener'
 
 const connectAndStart = async () => {
   if (!process.env.ALLOCATIONS_MONGO_URI)
@@ -32,7 +31,8 @@ const connectAndStart = async () => {
 
   // Initialise listeners
   new UserCreatedListener(nats.client).listen()
-  new UpdateUserPointsListener(nats.client).listen()
+
+  // TODO: USER UPDATED Listener
 
   const PORT = process.env.LISTEN_PORT || 3000
   app.listen(PORT, () =>

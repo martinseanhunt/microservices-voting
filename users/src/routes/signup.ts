@@ -30,6 +30,7 @@ export const signup: Handler = async (req: Request, res: Response) => {
   await new UserCreatedPublisher(nats.client).publish({
     id: user.id,
     version: user.version,
+    points: user.points,
   })
 
   // Create the jwt, save to session
