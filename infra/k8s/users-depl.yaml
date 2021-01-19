@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: users-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: users
   template:
     metadata:
       labels:
-        app: auth
+        app: users
     spec:
       containers:
-        - name: auth
+        - name: users
           image: martinseanhunt/voting-auth
           env:
             - name: USERS_MONGO_URI
@@ -40,13 +40,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: users-srv
 spec:
   type: ClusterIP
   selector:
-    app: auth
+    app: users
   ports:
-    - name: auth
+    - name: users
       protocol: TCP
       port: 3000
       targetPort: 3000

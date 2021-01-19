@@ -10,11 +10,11 @@ spec:
     - host: 'api.localhost'
       http:
         paths:
-          - path: /auth/?(.*)
+          - path: /users/?(.*)
             pathType: Prefix
             backend:
               service:
-                name: auth-srv
+                name: users-srv
                 port:
                   number: 3000
           - path: /causes/?(.*)

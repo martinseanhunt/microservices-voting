@@ -1,5 +1,5 @@
 {
-  "name": "auth",
+  "name": "users",
   "version": "1.0.0",
   "main": "index.ts",
   "author": "Martin Hunt",

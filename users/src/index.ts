@@ -27,10 +27,10 @@ const connectAndStart = async () => {
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
-  console.log('connected to auth database')
+  console.log('connected to users database')
 
   const PORT = process.env.LISTEN_PORT || 3000
-  app.listen(PORT, () => console.log(`Auth service listening on ${PORT}`))
+  app.listen(PORT, () => console.log(`Users service listening on ${PORT}`))
 }
 
 connectAndStart()

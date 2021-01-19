@@ -9,7 +9,7 @@ build:
     push: false
   artifacts:
     - image: martinseanhunt/voting-auth
-      context: auth
+      context: users
       docker:
         dockerfile: Dockerfile
       sync:

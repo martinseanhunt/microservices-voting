@@ -9,9 +9,9 @@ export const updateUserPoints = async (req: Request, res: Response) => {
   // jobs. This feels like not a great setup and I don't really think it's how
   // nats streaming server is intended to be used. Would be better off either
   // Actually doing the computing for the jobs in this service or using a redis/bull queue
-  // but I'm just doing it this way to save some time for now.
+  // but I'm doing it this way to save some time for now.
 
-  // The reason I'm using a seperate service to trigger any jobs is so that the sercie's endpoints can
+  // The reason I'm using a seperate service to trigger any jobs is so that this services endpoints can
   // be isolated and not exposed by ingress. (Outside world can't trigger any of these jobs)
   await new UpdateUserPointsPublisher(nats.client).publish({})
 

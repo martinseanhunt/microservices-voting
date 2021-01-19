@@ -41,13 +41,13 @@ app.use(currentUser)
 
 // TODO: TESTS!
 // Routes
-app.post('/auth/signup', signupValidation, handleValidationErrors, signup)
-app.post('/auth/signin', signinValidation, handleValidationErrors, signin)
-app.post('/auth/signout', signout)
-app.get('/auth/currentuser', currentUserHandler)
+app.post('/users/signup', signupValidation, handleValidationErrors, signup)
+app.post('/users/signin', signinValidation, handleValidationErrors, signin)
+app.post('/users/signout', signout)
+app.get('/users/currentuser', currentUserHandler)
 
 // Health check
-app.get('/auth/health', healthCheckHandler)
+app.get('/users/health', healthCheckHandler)
 
 // Catch all 404 route
 app.all('*', notFoundHandler)
