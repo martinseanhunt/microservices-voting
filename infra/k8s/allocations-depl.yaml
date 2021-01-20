@@ -19,12 +19,12 @@ spec:
             - name: ALLOCATIONS_MONGO_URI
               valueFrom:
                 secretKeyRef:
-                  name: allocations-mongo-secret
+                  name: secrets
                   key: ALLOCATIONS_MONGO_URI
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jwt-secret
+                  name: secrets
                   key: JWT_KEY
             - name: NATS_URI
               value: 'http://nats-srv:4222'
