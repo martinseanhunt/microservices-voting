@@ -1,3 +1,5 @@
+# TODO: Persist nats messages on deletion / recreation of the deployment or pod!
+# https://docs.nats.io/nats-streaming-server/configuring/persistence
 apiVersion: apps/v1
 kind: Deployment
 metadata:

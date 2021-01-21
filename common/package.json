@@ -1,6 +1,6 @@
 {
   "name": "@mhunt/voting-common",
-  "version": "1.0.31",
+  "version": "1.0.33",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "//": "only incldue the built files in the actual package that gets installed",

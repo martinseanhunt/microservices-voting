@@ -2,18 +2,21 @@ import mongoose from 'mongoose'
 
 // properties required for creation
 interface CauseAttrs {
+  id: string
   title: string
   image: string
   description: string
   url: string
+  totalPointsAllocated: number
 }
 
 // properties of the returned document
 export interface CauseDoc extends mongoose.Document {
   title: string
   image: string
-  decription: string
+  description: string
   url: string
+  totalPointsAllocated: number
 }
 
 // Static properties / methods for the model
@@ -40,6 +43,10 @@ const causeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    totalPointsAllocated: {
+      type: Number,
+      required: true,
+    },
   },
   {
     // Transform the object which is returned when serializing the
@@ -48,15 +55,37 @@ const causeSchema = new mongoose.Schema(
       transform: (doc, ret) => {
         ret.id = ret._id
         delete ret._id
-        delete ret.__v
+        delete ret.version
       },
     },
+    // Makes sure that the version is updated on every save
+    // and that we can't save a doc if the version is not sequential
+    // This makes sure that any nats events are processed in the correct order
+    optimisticConcurrency: true,
+    // Rename __v to version
+    versionKey: 'version',
   }
 )
 
 // custom build function so we can type check the input parameters
 causeSchema.statics.build = (attrs: CauseAttrs) => {
-  return new Cause(attrs)
+  const { id, ...rest } = attrs
+
+  return new Cause({
+    _id: id,
+    ...rest,
+  })
+}
+
+// Static method to find the previous sequential version of a user. Using this so we can reject messages from NATS
+// when they arrive out of order.
+
+// TODO: Refactor to util function
+causeSchema.statics.findPreviousVersion = (id: string, version: number) => {
+  return Cause.findOne({
+    _id: id,
+    version: version - 1,
+  })
 }
 
 // initialize the model

@@ -43,7 +43,7 @@ app.use(currentUser)
 // TODO: TESTS!
 // Routes
 app.post(
-  '/allocations/allocate',
+  '/allocations/allocate-points',
   protectedRoute,
   allocatePointsValidation,
   handleValidationErrors,

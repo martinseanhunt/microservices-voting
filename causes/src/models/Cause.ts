@@ -12,8 +12,10 @@ interface CauseAttrs {
 export interface CauseDoc extends mongoose.Document {
   title: string
   image: string
-  decription: string
+  description: string
   url: string
+  totalPointsAllocated: number
+  version: number
 }
 
 // Static properties / methods for the model
@@ -40,6 +42,10 @@ const causeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    totalPointsAllocated: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     // Transform the object which is returned when serializing the
@@ -48,9 +54,15 @@ const causeSchema = new mongoose.Schema(
       transform: (doc, ret) => {
         ret.id = ret._id
         delete ret._id
-        delete ret.__v
+        delete ret.version
       },
     },
+    // Makes sure that the version is updated on every save
+    // and that we can't save a doc if the version is not sequential
+    // This makes sure that any nats events are processed in the correct order
+    optimisticConcurrency: true,
+    // Rename __v to version
+    versionKey: 'version',
   }
 )
 

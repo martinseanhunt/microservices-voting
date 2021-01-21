@@ -3,9 +3,9 @@
 
 
 "@mhunt/voting-common@^1.0.10":
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/@mhunt/voting-common/-/voting-common-1.0.31.tgz#d3f9eb0e883ad3ed97ca2fd525b75ac474d6326d"
-  integrity sha512-BnwLU7Bgx6wlqvr0KpTSsxhayJ2RVOJs6v84Tr6YtoyDPWp/Xa4lIATpSS1dRMnzGJfXYecGTfkQIqgpXi3Gkw==
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/@mhunt/voting-common/-/voting-common-1.0.33.tgz#d8a40091ec333184e0e1b1838f76acbec8ba883c"
+  integrity sha512-/RStV1z0KFXwwrsYDezBS1QlLksX8+B5/Fxh2uFYNZ72fF67CnGYPhGb5vuBIqmiusAEHFUcycWsGoZ60cPGTw==
   dependencies:
     express "^4.17.1"
     express-validator "^6.9.2"
