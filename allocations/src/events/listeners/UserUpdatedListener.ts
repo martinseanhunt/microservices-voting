@@ -14,9 +14,9 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
   async onMessage(data: UserUpdatedEvent['data'], msg: Message) {
     const { id, version, points } = data
 
-    console.log(`updating user ${id} with version ${version}`)
+    console.log(`updating user ${id} to version ${version}`)
 
-    // Find the user we're updating - if the version
+    // Find the user we're updating - if the version === incoming version - 1
     const user = await User.findPreviousVersion(id, version)
 
     if (!user)
@@ -32,7 +32,7 @@ export class UserUpdatedListener extends Listener<UserUpdatedEvent> {
 
     await user.save()
 
-    console.log(`updated user ${id} with version ${version}`)
+    console.log(`updated user ${id} to version ${version}`)
 
     // Acknowledge the message on success so NATS knows it can stop sending the event
     msg.ack()

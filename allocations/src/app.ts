@@ -56,6 +56,8 @@ app.get('/allocations/health', healthCheckHandler)
 // Catch all 404 route
 app.all('*', notFoundHandler)
 
+// TODO: Work out why some errors aren't being handled and are killing the server
+
 // Error handler
 app.use(errorHandler)
 
