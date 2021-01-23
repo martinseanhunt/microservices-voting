@@ -23,5 +23,6 @@ export * from './events/event-types/UserCreatedEvent'
 export * from './events/event-types/UserUpdatedEvent'
 export * from './events/event-types/CauseCreatedEvent'
 export * from './events/event-types/CauseUpdatedEvent'
+export * from './events/event-types/AllocationsUpdatedEvent'
 
 export * from './events/event-types/UpdateUserPointsEvent'

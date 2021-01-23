@@ -13,11 +13,33 @@ export class CauseUpdatedListener extends Listener<CauseUpdatedEvent> {
   queueGroupName = queueGroupName
 
   async onMessage(data: CauseUpdatedEvent['data'], msg: Message) {
-    const { id, title, image, description, url, totalPointsAllocated } = data
+    const {
+      id,
+      title,
+      image,
+      description,
+      url,
+      totalPointsAllocated,
+      version,
+    } = data
 
-    console.log('Cause has been udpated, need to implemtn update functionality')
+    const cause = await Cause.findPreviousVersion(id, version)
+    if (!cause)
+      return console.error(
+        `Cause: ${id} not found in database or version: ${version} non-sequential`
+      )
 
-    // Acknowledge the message on success so NATS knows it can stop sending the event
-    // msg.ack()
+    cause.set({
+      title,
+      image,
+      description,
+      url,
+      totalPointsAllocated,
+    })
+
+    await cause.save()
+
+    console.log(`Updated cause ${id}`)
+    msg.ack()
   }
 }

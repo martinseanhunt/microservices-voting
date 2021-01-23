@@ -23,6 +23,7 @@ export interface CauseDoc extends mongoose.Document {
 interface CauseModel extends mongoose.Model<CauseDoc> {
   // create our own build method so we can type check params
   build(attrs: CauseAttrs): CauseDoc
+  findPreviousVersion(id: string, version: number): Promise<CauseDoc | null>
 }
 
 const causeSchema = new mongoose.Schema(

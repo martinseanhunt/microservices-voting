@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import { body, check } from 'express-validator'
 
-import { BadRequestError } from '@mhunt/voting-common'
+import { BadRequestError, nats } from '@mhunt/voting-common'
 
 import { Cause } from '../models/Cause'
 import { User } from '../models/User'
-import { Allocation } from '../models/Allocation'
+import { Allocation, AllocationDoc } from '../models/Allocation'
+import { AllocationsUpdatedPublisher } from '../events/publishers/AllocationsUpdatedPublisher'
 
 // TODO: TEst
 
@@ -63,35 +64,36 @@ export const allocatePoints = async (req: Request, res: Response) => {
   )
 
   // Save all the new documents in a batch operation
-  const newAllocations = await Allocation.create(newAllocationDocuments)
+  // Create returns the wrong type... Should be AllocationDoc[] since we're passing an array.
+  // @ts-ignore - TODO: How can I avoid having to use this?
+  const newAllocations: AllocationDoc[] = await Allocation.create(
+    newAllocationDocuments
+  )
 
-  // Create returns the wrong type above... Should be AllocationDoc[] since we're passing an array.
   console.log(
-    // @ts-ignore
     `Created ${newAllocations.length} new allocations for user: ${user.id}`
   )
 
-  // TODO: Should we do this in a redis/bull job sp we can do this asyncronously and handle failures / retries?
+  // TODO: Should we do this in a redis/bull job so we can do this asyncronously and handle failures / retries?
   // Is this a big enough job to be inpactful to the user waiting on it?
   const totalAllocations = await aggregateTotalAllocations()
 
-  // TODO: Emit allocations updated event
-  console.log(totalAllocations)
-
-  // TODO: Create a cuase updated listener to handle the update that will be received in return
-  // from emitting the event above
+  // Emit allocations updated event
+  await new AllocationsUpdatedPublisher(nats.client).publish(totalAllocations)
 
   return res.status(201).send(newAllocations)
 }
 
 const aggregateTotalAllocations = async (): Promise<
   {
-    id: string
+    causeId: string
     totalPoints: number
     allocationsToCause: number
   }[]
 > => {
-  const totalAllcations = await Allocation.aggregate([
+  // TODO: only count allocations for the current epoch
+  const totalAllocations = await Allocation.aggregate([
+    // Sum up the points for every cause.
     {
       $group: {
         _id: '$causeId',
@@ -101,7 +103,11 @@ const aggregateTotalAllocations = async (): Promise<
     },
   ])
 
-  return totalAllcations
+  return totalAllocations.map(({ _id, ...rest }) => ({
+    // Rename _id to causeId for clarity
+    causeId: _id,
+    ...rest,
+  }))
 }
 
 export const allocatePointsValidation = [

@@ -18,7 +18,7 @@ export class AllocationsUpdatedListener extends Listener<AllocationsUpdatedEvent
   async onMessage(data: AllocationsUpdatedEvent['data'], msg: Message) {
     // NOTE/TODO: There is a concurrency issue here.
     // What if we have lots of users submitting point allocations at the same time
-    // and the causes service goes down for a time? The events would likely not be
+    // or the causes service goes down for a time? The events would likely not be
     // processed in the correct oder.
 
     // I think the best way to tackle this problem would be to have this event we're
@@ -26,19 +26,16 @@ export class AllocationsUpdatedListener extends Listener<AllocationsUpdatedEvent
     // allocating some points. That way we know if it gets out of sync we only have to wait
     // a short amount of time before the total point allocations are updated. Need to understand
     // this better before making a decision on how to handle long term. Either that or a rethink of
-    // how I'm handling this process entirely. Could I attatch the causeVersion to the AllocationsUpdatedEvent?
-
-    // Loop through each cause and update the total value... is there a more efficient way to do
-    // this with mongodb?
+    // how I'm handling this process entirely.
 
     console.log('Updating total points allocated to causes')
 
+    // Loop through each cause and update the total value
     let errors: string[] = []
     for (const allocation of data) {
-      const cause = await Cause.findById(allocation.causeId)
-
       console.log(`Updating points for cause ${allocation.causeId}`)
 
+      const cause = await Cause.findById(allocation.causeId)
       if (!cause) {
         console.error(
           `Cause: ${allocation.causeId} not found in causes-service database`
