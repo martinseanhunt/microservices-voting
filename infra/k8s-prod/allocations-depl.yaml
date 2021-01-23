@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: allocations-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: allocations
+  template:
+    metadata:
+      labels:
+        app: allocations
+    spec:
+      containers:
+        - name: allocations
+          image: martinseanhunt/voting-allocations-prod
+          env:
+            - name: ALLOCATIONS_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ALLOCATIONS_MONGO_URI
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: JWT_KEY
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'nats-voting'
+            - name: NATS_CLIENT_ID
+              # using this to dynamically set the value to the pod name
+              # as this value needs to be unique for ALL instances of the service
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: allocations-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: allocations
+  ports:
+    - name: allocations
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
