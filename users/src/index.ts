@@ -34,7 +34,7 @@ const connectAndStart = async () => {
   new UpdateUserPointsListener(nats.client).listen()
 
   const PORT = process.env.LISTEN_PORT || 3000
-  app.listen(PORT, () => console.log(`Users service listening on ${PORT}.`))
+  app.listen(PORT, () => console.log(`Users service listening on ${PORT}`))
 }
 
 connectAndStart()

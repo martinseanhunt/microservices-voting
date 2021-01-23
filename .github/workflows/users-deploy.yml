@@ -23,7 +23,7 @@ jobs:
       # Build and push the docker image
 
       # change in to the service and build the docker image
-      - run: cd auth && docker build -t martinseanhunt/voting-auth .
+      - run: cd users && docker build -t martinseanhunt/voting-auth .
       # using secrets defined in the repo to login to docker hub
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         # sets the env for this command, here we're setting the env variaables
