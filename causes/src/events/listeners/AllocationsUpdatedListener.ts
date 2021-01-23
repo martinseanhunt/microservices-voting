@@ -19,14 +19,17 @@ export class AllocationsUpdatedListener extends Listener<AllocationsUpdatedEvent
     // NOTE/TODO: There is a concurrency issue here.
     // What if we have lots of users submitting point allocations at the same time
     // or the causes service goes down for a time? The events would likely not be
-    // processed in the correct oder.
+    // processed in the correct order and so the totals could be incorrect.
 
     // I think the best way to tackle this problem would be to have this event we're
     // listening for be triggered by a regular job, rather than being triggered by a user
     // allocating some points. That way we know if it gets out of sync we only have to wait
     // a short amount of time before the total point allocations are updated. Need to understand
     // this better before making a decision on how to handle long term. Either that or a rethink of
-    // how I'm handling this process entirely.
+    // how I'm handling this process entirely. Maybe this is an instance where it would be worth creating
+    // a dependancy on the allocations service and we could grab the most up to date allocation data with
+    // which to update the cuase here. it wouldn't cause an issue if the allocations service down
+    // because nats would just retry the events.
 
     console.log('Updating total points allocated to causes')
 
