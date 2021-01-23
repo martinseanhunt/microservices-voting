@@ -5,7 +5,9 @@
   "author": "Martin Hunt",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev --poll src/index.ts"
+    "start": "ts-node-dev --poll src/index.ts",
+    "build": "tsc",
+    "prod": "node build/index.js"
   },
   "dependencies": {
     "@mhunt/voting-common": "^1.0.10",
