@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobs-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jobs
+  template:
+    metadata:
+      labels:
+        app: jobs
+    spec:
+      containers:
+        - name: jobs
+          image: martinseanhunt/voting-jobs-prod
+          env:
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'nats-voting'
+            - name: NATS_CLIENT_ID
+              # using this to dynamically set the value to the pod name
+              # as this value needs to be unique for ALL instances of the service
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobs-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: jobs
+  ports:
+    - name: jobs
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-user-points
+spec:
+  # Once a minute for testing purpoueses
+  schedule: '* * * * *'
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-points
+              image: buildpack-deps:curl
+              args:
+                - /bin/sh
+                - -ec
+                - curl http://jobs-srv:3000/update-user-points
+          restartPolicy: Never

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: causes-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: causes
+  template:
+    metadata:
+      labels:
+        app: causes
+    spec:
+      containers:
+        - name: causes
+          image: martinseanhunt/voting-causes-prod
+          env:
+            - name: CAUSES_MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: CAUSES_MONGO_URI
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: JWT_KEY
+            - name: NATS_URI
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'nats-voting'
+            - name: NATS_CLIENT_ID
+              # using this to dynamically set the value to the pod name
+              # as this value needs to be unique for ALL instances of the service
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: causes-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: causes
+  ports:
+    - name: causes
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

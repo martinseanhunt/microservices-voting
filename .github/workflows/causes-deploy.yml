@@ -23,7 +23,7 @@ jobs:
       # Build and push the docker image
 
       # change in to the service and build the docker image
-      - run: cd causes && docker build -t martinseanhunt/voting-causes .
+      - run: cd causes && docker build -f Dockerfile.prod -t martinseanhunt/voting-causes-prod .
       # using secrets defined in the repo to login to docker hub
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         # sets the env for this command, here we're setting the env variaables
@@ -32,7 +32,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       # push the docker image to docker hub
-      - run: docker push martinseanhunt/voting-causes
+      - run: docker push martinseanhunt/voting-causes-prod
 
       # Connect to AWS kubernetes cluster
 
