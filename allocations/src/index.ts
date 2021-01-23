@@ -40,7 +40,7 @@ const connectAndStart = async () => {
 
   const PORT = process.env.LISTEN_PORT || 3000
   app.listen(PORT, () =>
-    console.log(`Allocations service listening on ${PORT}`)
+    console.log(`Allocations service listening on ${PORT}.`)
   )
 }
 

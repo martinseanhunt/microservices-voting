@@ -32,7 +32,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       # push the docker image to docker hub
-      - run: docker push martinseanhunt/voting-allocations
+      - run: docker push martinseanhunt/voting-allocations-prod
 
       # Connect to AWS kubernetes cluster
 
