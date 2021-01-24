@@ -18,7 +18,7 @@ const connectAndStart = async () => {
   )
 
   const PORT = process.env.LISTEN_PORT || 3000
-  app.listen(PORT, () => console.log(`Jobs service listening on ${PORT}.`))
+  app.listen(PORT, () => console.log(`Jobs service listening on ${PORT}`))
 }
 
 connectAndStart()

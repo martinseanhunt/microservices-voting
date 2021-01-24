@@ -33,7 +33,7 @@ const connectAndStart = async () => {
   new AllocationsUpdatedListener(nats.client).listen()
 
   const PORT = process.env.LISTEN_PORT || 3000
-  app.listen(PORT, () => console.log(`Causes service listening on ${PORT}.`))
+  app.listen(PORT, () => console.log(`Causes service listening on ${PORT}`))
 }
 
 connectAndStart()

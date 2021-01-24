@@ -34,6 +34,16 @@ jobs:
       # push the docker image to docker hub
       - run: docker push martinseanhunt/voting-allocations-prod
 
-      # Connect to AWS kubernetes cluster
+      # Configure aws cli
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
 
-      # restart the deployment
+      # connect to kubernetes cluster
+      - run: aws eks --region eu-west-1 update-kubeconfig --name simple-node
+
+      # restart the deployment to use the latest image
+      - run: kubectl rollout restart deployment allocations-depl
