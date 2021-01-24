@@ -74,40 +74,10 @@ export const allocatePoints = async (req: Request, res: Response) => {
     `Created ${newAllocations.length} new allocations for user: ${user.id}`
   )
 
-  // TODO: Should we do this in a redis/bull job so we can do this asyncronously and handle failures / retries?
-  // Is this a big enough job to be inpactful to the user waiting on it?
-  const totalAllocations = await aggregateTotalAllocations()
-
   // Emit allocations updated event
-  await new AllocationsUpdatedPublisher(nats.client).publish(totalAllocations)
+  await new AllocationsUpdatedPublisher(nats.client).publish({})
 
   return res.status(201).send(newAllocations)
-}
-
-const aggregateTotalAllocations = async (): Promise<
-  {
-    causeId: string
-    totalPoints: number
-    allocationsToCause: number
-  }[]
-> => {
-  // TODO: only count allocations for the current epoch
-  const totalAllocations = await Allocation.aggregate([
-    // Sum up the points for every cause.
-    {
-      $group: {
-        _id: '$causeId',
-        totalPoints: { $sum: '$points' },
-        allocationsToCause: { $sum: 1 },
-      },
-    },
-  ])
-
-  return totalAllocations.map(({ _id, ...rest }) => ({
-    // Rename _id to causeId for clarity
-    causeId: _id,
-    ...rest,
-  }))
 }
 
 export const allocatePointsValidation = [

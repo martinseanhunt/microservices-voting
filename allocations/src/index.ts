@@ -24,7 +24,7 @@ const connectAndStart = async () => {
     process.env.NATS_URI
   )
 
-  // TODO: connect to database
+  // Connect to database
   await mongoose.connect(process.env.ALLOCATIONS_MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

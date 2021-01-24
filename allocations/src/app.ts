@@ -19,6 +19,7 @@ import {
   allocatePoints,
   allocatePointsValidation,
 } from './routes/allocatePoints'
+import { aggregateAllocations } from './routes/aggregateAllocations'
 
 // init express
 const app = express()
@@ -49,6 +50,7 @@ app.post(
   handleValidationErrors,
   allocatePoints
 )
+app.get('/allocations/aggregate-alloctions', aggregateAllocations)
 
 // Health check
 app.get('/allocations/health', healthCheckHandler)

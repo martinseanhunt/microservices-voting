@@ -47,7 +47,7 @@ metadata:
   name: update-user-points
 spec:
   # Once a minute for testing purpoueses
-  schedule: '* * * * *'
+  schedule: '*/10 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1

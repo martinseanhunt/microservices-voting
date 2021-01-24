@@ -1,4 +1,5 @@
 import { Message } from 'node-nats-streaming'
+import axios from 'axios'
 
 import {
   Listener,
@@ -16,26 +17,34 @@ export class AllocationsUpdatedListener extends Listener<AllocationsUpdatedEvent
   queueGroupName = queueGroupName
 
   async onMessage(data: AllocationsUpdatedEvent['data'], msg: Message) {
-    // NOTE/TODO: There is a concurrency issue here.
-    // What if we have lots of users submitting point allocations at the same time
-    // or the causes service goes down for a time? The events would likely not be
-    // processed in the correct order and so the totals could be incorrect.
-
-    // I think the best way to tackle this problem would be to have this event we're
-    // listening for be triggered by a regular job, rather than being triggered by a user
-    // allocating some points. That way we know if it gets out of sync we only have to wait
-    // a short amount of time before the total point allocations are updated. Need to understand
-    // this better before making a decision on how to handle long term. Either that or a rethink of
-    // how I'm handling this process entirely. Maybe this is an instance where it would be worth creating
-    // a dependancy on the allocations service and we could grab the most up to date allocation data with
-    // which to update the cuase here. it wouldn't cause an issue if the allocations service down
-    // because nats would just retry the events.
+    // This is an instance where it would seeem worth creating a dependancy on the allocations service.
+    // We can grab the most up to date allocation data with which to update the cuase here.
+    // This avoids any concurrancy issue and it wouldn't cause an issue if the allocations service was down
+    // because nats would just retry the events and the user isn't waiting for a succesful resolution to this.
 
     console.log('Updating total points allocated to causes')
+    console.log('getting latest aggregation from allocations service')
+
+    let allocations
+    try {
+      // TODO: URL in constants file or env var
+      allocations = await axios.get(
+        'http://allocations-srv:3000/allocations/aggregate-alloctions'
+      )
+    } catch (e) {
+      return console.error(
+        `Error getting aggreation from allocations service: ${e.message}`
+      )
+    }
+
+    if (!allocations.data?.length) {
+      console.log('No aggregation data found in allocations service')
+      return msg.ack()
+    }
 
     // Loop through each cause and update the total value
     let errors: string[] = []
-    for (const allocation of data) {
+    for (const allocation of allocations.data) {
       console.log(`Updating points for cause ${allocation.causeId}`)
 
       const cause = await Cause.findById(allocation.causeId)
@@ -81,9 +90,6 @@ export class AllocationsUpdatedListener extends Listener<AllocationsUpdatedEvent
         totalPointsAllocated: cause.totalPointsAllocated,
         version: cause.version,
       })
-
-      // TODO: Should implement better error hanling on the Listener class otherwise an error in
-      // one of these listeners will not be caught and the express server will crash.
     }
 
     //  If there were any concurrency errors, don't ack the message
