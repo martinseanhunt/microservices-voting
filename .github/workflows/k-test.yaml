@@ -20,5 +20,6 @@ jobs:
       # Connect to AWS kubernetes cluster
       - run: aws --version
       - run: kubectl config get-contexts
+      - run: aws eks --region eu-west-1 update-kubeconfig --name simple-node
 
       # restart the deployment
