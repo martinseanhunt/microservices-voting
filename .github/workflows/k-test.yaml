@@ -31,4 +31,6 @@ jobs:
 
       - run: kubectl config get-contexts
 
+      - run: kubectl rollout restart deployment users-depl
+
       # restart the deployment
