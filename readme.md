@@ -33,11 +33,27 @@ In order to run the application locally the following pre requisites must be met
 ### Installation
 
 1. Create a secrets file (infra/k8s/secrets.yaml)
-2. Input secrets for database connection and JWT secret
+2. Input secrets for database connection and JWT secret (see secrets template below)
 3. Run `yarn install` from each individual service directory
 4. run `skaffold dev` from the root directory
 5. Application will be running on http://api.localhost/
 6. Health checks for each service are available on /(service)/health e.g. http://api.localhost/causes/health
+
+### Secrets template
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrets
+type: Opaque
+stringData:
+  USERS_MONGO_URI:
+  CAUSES_MONGO_URI:
+  ALLOCATIONS_MONGO_URI:
+  JWT_KEY:
+
+```
 
 ### Postman
 
@@ -50,6 +66,10 @@ In order to test admin functionality you can log in with user:
     "password": "testpass"
 }
 ```
+
+### Production
+
+The production application is available at [http://voting-api/mh.codes](http://voting-api/mh.codes)
 
 ## Deployment
 
