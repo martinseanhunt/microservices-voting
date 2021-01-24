@@ -14,12 +14,22 @@ const connectAndStart = async () => {
     throw new Error('Please set NATS_CLUSTER_ID')
 
   // TODO handle connection errors, disconnect / shutdown?
-  // Connect to NATS
-  await nats.connect(
-    process.env.NATS_CLUSTER_ID,
-    process.env.NATS_CLIENT_ID,
-    process.env.NATS_URI
-  )
+  // Retry connecting to NATS
+  // TODO: Abstract this retry logic over to common
+  let connected = false
+  while (connected === false) {
+    try {
+      console.log('trying nats connection')
+      await nats.connect(
+        process.env.NATS_CLUSTER_ID!,
+        process.env.NATS_CLIENT_ID!,
+        process.env.NATS_URI!
+      )
+      connected = true
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
 
   // Connect to database
   await mongoose.connect(process.env.CAUSES_MONGO_URI, {

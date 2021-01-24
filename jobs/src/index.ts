@@ -11,11 +11,23 @@ const connectAndStart = async () => {
 
   // TODO: handle shutdown / disconnect ?
   // connect to nats
-  await nats.connect(
-    process.env.NATS_CLUSTER_ID,
-    process.env.NATS_CLIENT_ID,
-    process.env.NATS_URI
-  )
+
+  // Retry connecting to NATS
+  // TODO: Abstract this retry logic over to common
+  let connected = false
+  while (connected === false) {
+    try {
+      console.log('trying nats connection')
+      await nats.connect(
+        process.env.NATS_CLUSTER_ID!,
+        process.env.NATS_CLIENT_ID!,
+        process.env.NATS_URI!
+      )
+      connected = true
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
 
   const PORT = process.env.LISTEN_PORT || 3000
   app.listen(PORT, () => console.log(`Jobs service listening on ${PORT}`))

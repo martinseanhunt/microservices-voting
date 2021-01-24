@@ -57,3 +57,5 @@ spec:
       protocol: TCP
       port: 8222
       targetPort: 8222
+# TODO: DOn't forget to set up persistant volume in whatever environment we deploy to for
+# persisting nats messages on service / cluster outage
