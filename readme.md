@@ -69,7 +69,7 @@ In order to test admin functionality you can log in with user:
 
 ### Production
 
-The production application is available at [http://voting-api/mh.codes](http://voting-api/mh.codes)
+The production application is available at [http://voting-api.mh.codes](http://voting-api/mh.codes)
 
 ## Deployment
 
